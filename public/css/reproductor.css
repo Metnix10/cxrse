@@ -1,0 +1,200 @@
+.player-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 25px;
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.video-container {
+    background-color: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+}
+
+.video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.lesson-info {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.lesson-badge {
+    background-color: #e0e7ff;
+    color: #4338ca;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.lesson-info h1 {
+    margin: 10px 0 5px 0;
+}
+
+.lesson-info p {
+    color: #4b5563;
+}
+
+.resources-card {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 15px;
+}
+
+.resources-card h3 {
+    margin-top: 0;
+    font-size: 1rem;
+}
+
+.btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    background-color: #e5e7eb;
+    color: #1f2937;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.sidebar-playlist {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    height: fit-content;
+}
+
+.sidebar-playlist h2 {
+    font-size: 1.2rem;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.level-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.level-item:hover, .level-item.active {
+    background-color: #f3f4f6;
+    border-color: #3b82f6;
+}
+
+.level-duration {
+    display: block;
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.comments-section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.comments-subtitle {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.comments-section textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.btn-submit-comment {
+    margin-top: 10px;
+    padding: 8px 20px;
+    background-color: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.comments-divider {
+    margin: 20px 0;
+    border: 0;
+    border-top: 1px solid #f3f4f6;
+}
+
+.comment-item {
+    background: #f9fafb;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.comment-item strong {
+    display: block;
+}
+
+.comment-item small {
+    color: #9ca3af;
+    font-weight: normal;
+}
+
+.comment-item p {
+    margin: 5px 0 0 0;
+    color: #374151;
+}
+
+.progress-section {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.progress-section label {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #374151;
+}
+
+.progress-bar-bg {
+    background: #e5e7eb;
+    height: 8px;
+    border-radius: 4px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    background: #3b82f6;
+    height: 100%;
+}
+
+@media (max-width: 900px) {
+    .player-layout {
+        grid-template-columns: 1fr;
+    }
+}

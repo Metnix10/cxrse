@@ -1,0 +1,91 @@
+.mb-10 { margin-bottom: 10px; }
+.mb-15 { margin-bottom: 15px; }
+.mb-20 { margin-bottom: 20px; }
+.mb-25 { margin-bottom: 25px; }
+.flex-1 { flex: 1; }
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    box-sizing: border-box;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+}
+
+.file-input {
+    margin-top: 5px;
+}
+
+.section-divider {
+    margin: 30px 0;
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.btn-add-level {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+}
+
+.level-card {
+    border: 1px solid #e5e7eb;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: #f9fafb;
+}
+
+.level-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.level-title {
+    margin: 0;
+}
+
+.btn-delete-level {
+    background-color: #ef4444;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-delete-level:hover {
+    background-color: #dc2626;
+}
+
+/* Acciones del formulario */
+.form-actions {
+    margin-top: 30px;
+    text-align: right;
+}
+
+.btn-submit-course {
+    padding: 12px 25px;
+    font-size: 1rem;
+}
+
+@media (max-width: 640px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+}
