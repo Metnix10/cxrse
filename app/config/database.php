@@ -1,28 +1,27 @@
 <?php
 
 class Database {
-    private static $host = "localhost";
-    private static $db_name = "cxrse";
-    private static $username = "root";         
-    private static $password = "";             
-    private static $conn = null;
+    private $host = "localhost";
+    private $db_name = "cxrse";
+    private $username = "root";
+    private $password = ""; 
+    public $conn;
 
-    public static function conectar() {
-        if (self::$conn === null) {
-            try {
-                self::$conn = new PDO(
-                    "mysql:host=" . self::$host . ";dbname=" . self::$db_name . ";charset=utf8",
-                    self::$username,
-                    self::$password,
-                    [
-                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-                    ]
-                );
-            } catch (PDOException $e) {
-                die("Error al conectar con la base de datos: " . $e->getMessage());
-            }
+    public function getConnection() {
+        $this->conn = null;
+
+        try {
+            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
+            
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->conn->exec("set names utf8mb4");
+            
+        } catch(PDOException $exception) {
+            echo json_encode(["error" => "Error de conexión: " . $exception->getMessage()]);
+            exit;
         }
-        return self::$conn;
+
+        return $this->conn;
     }
 }
+?>

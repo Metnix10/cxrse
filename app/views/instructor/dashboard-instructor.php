@@ -1,3 +1,8 @@
+<?php
+require_once '../../middlewares/AuthMiddleware.php';
+AuthMiddleware::verificarRol('Instructor'); 
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
