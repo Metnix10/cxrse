@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+
     const levelsContainer = document.getElementById('levelsContainer');
     const btnAddLevel = document.getElementById('btnAddLevel');
     let levelCount = 1;
@@ -50,4 +51,35 @@ document.addEventListener('DOMContentLoaded', () => {
             card.querySelector('.level-title').textContent = `Nivel ${levelCount}`;
         });
     }
+
+    const form = document.querySelector('form');
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const inputFile = document.querySelector('input[type="file"]');
+        
+        if (inputFile.files.length === 0) {
+            alert("Por favor selecciona una imagen de portada.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('imagen', inputFile.files[0]);
+
+        fetch('index.php?url=upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Respuesta de la API:", data);
+            if(data.url_imagen) {
+                alert("¡Éxito! Imagen alojada en: " + data.url_imagen);
+            } else {
+                alert("Error: " + data.error);
+            }
+        })
+        .catch(error => console.error('Error en fetch:', error));
+    });
 });

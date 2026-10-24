@@ -26,9 +26,7 @@ if (!empty($data->nombre) && !empty($data->email) && !empty($data->password) && 
     $usuario->email = $data->email;
     $usuario->genero = $data->genero;
     $usuario->fecha_nacimiento = $data->fecha_nacimiento;
-
     $usuario->foto = isset($data->foto) && !empty($data->foto) ? $data->foto : 'default-avatar.png';
-    
     $usuario->rol = isset($data->rol) ? $data->rol : 'Estudiante'; 
     $usuario->password = password_hash($data->password, PASSWORD_DEFAULT);
 

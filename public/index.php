@@ -1,9 +1,23 @@
 <?php
 
-header("Access-Control-Allow-Origin: *");
+$origenes_permitidos = [
+    'http://localhost',
+    'http://127.0.0.1'
+];
+
+$origen = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+
+if (in_array($origen, $origenes_permitidos)) {
+    header("Access-Control-Allow-Origin: " . $origen);
+} elseif ($origen !== '') {
+
+    http_response_code(403);
+    echo json_encode(["error" => "Acceso denegado por políticas de CORS"]);
+    exit();
+}
+
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
-
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(200);
@@ -58,6 +72,12 @@ switch ($url) {
         AuthMiddleware::verificarRol('Admin');
         require_once '../app/views/admin/admin-categorias.php';
         break;
+
+    case 'upload':
+        require_once '../app/controllers/UploadController.php';
+        $controller = new UploadController();
+        $controller->subirImagen();
+    break;
 
     default:
         http_response_code(404);
