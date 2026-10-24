@@ -12,6 +12,7 @@ $usuario = new Usuario($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
+
 if (!empty($data->nombre) && !empty($data->email) && !empty($data->password) && !empty($data->genero) && !empty($data->fecha_nacimiento)) {
 
     $stmt = $usuario->buscarPorEmail($data->email);
@@ -25,9 +26,10 @@ if (!empty($data->nombre) && !empty($data->email) && !empty($data->password) && 
     $usuario->email = $data->email;
     $usuario->genero = $data->genero;
     $usuario->fecha_nacimiento = $data->fecha_nacimiento;
+
+    $usuario->foto = isset($data->foto) && !empty($data->foto) ? $data->foto : 'default-avatar.png';
     
     $usuario->rol = isset($data->rol) ? $data->rol : 'Estudiante'; 
-
     $usuario->password = password_hash($data->password, PASSWORD_DEFAULT);
 
     if ($usuario->crear()) {

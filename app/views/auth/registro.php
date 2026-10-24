@@ -60,6 +60,6 @@
         </div>
     </div>
 
-    <script src="js/registro.js"></script>
+    <script src="/cxrse/public/js/registro.js?v=2"></script>
 </body>
 </html>

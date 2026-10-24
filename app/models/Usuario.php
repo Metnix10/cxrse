@@ -4,8 +4,12 @@ class Usuario {
     private $conn;
     private $table_name = "usuarios";
 
+    
     public $id;
     public $nombre;
+    public $genero;
+    public $fecha_nacimiento;
+    public $foto;
     public $email;
     public $password;
     public $rol;
@@ -44,21 +48,26 @@ class Usuario {
     }
 
     public function crear() {
+        
         $query = "INSERT INTO " . $this->table_name . " 
-                  (nombre, genero, fecha_nacimiento, email, password, rol, intentos_fallidos, estatus) 
-                  VALUES (:nombre, :genero, :fecha_nacimiento, :email, :password, :rol, 0, 'Activo')";
+                  (nombre, genero, fecha_nacimiento, foto, email, password, rol, intentos_fallidos, estatus) 
+                  VALUES (:nombre, :genero, :fecha_nacimiento, :foto, :email, :password, :rol, 0, 'Activo')";
 
         $stmt = $this->conn->prepare($query);
 
+        
         $this->nombre = htmlspecialchars(strip_tags($this->nombre));
-        $this->email = htmlspecialchars(strip_tags($this->email));
         $this->genero = htmlspecialchars(strip_tags($this->genero));
         $this->fecha_nacimiento = htmlspecialchars(strip_tags($this->fecha_nacimiento));
+        $this->foto = htmlspecialchars(strip_tags($this->foto)); 
+        $this->email = htmlspecialchars(strip_tags($this->email));
         $this->rol = htmlspecialchars(strip_tags($this->rol));
 
+        
         $stmt->bindParam(':nombre', $this->nombre);
         $stmt->bindParam(':genero', $this->genero);
         $stmt->bindParam(':fecha_nacimiento', $this->fecha_nacimiento);
+        $stmt->bindParam(':foto', $this->foto); 
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':password', $this->password);
         $stmt->bindParam(':rol', $this->rol);

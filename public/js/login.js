@@ -19,8 +19,38 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         return;
     }
 
-    alert('¡Inicio de sesión exitoso!');
-    window.location.href = 'index.html';
+    
+    const credenciales = {
+        email: email,
+        password: password
+    };
+
+   
+    fetch('../app/controllers/AuthController.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(credenciales)
+    })
+    .then(respuesta => {
+        if (!respuesta.ok) {
+            return respuesta.json().then(err => { throw new Error(err.error); });
+        }
+        return respuesta.json(); 
+    })
+    .then(datos => {
+        
+        alert(datos.mensaje + ". Bienvenido " + datos.usuario.nombre);
+        
+      
+        window.location.href = 'index.php?url=home';
+    })
+    .catch(error => {
+        
+        console.error('Error de servidor:', error);
+        mostrarError(error.message); 
+    });
 });
 
 function mostrarError(mensaje) {

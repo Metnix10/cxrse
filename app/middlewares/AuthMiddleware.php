@@ -7,16 +7,15 @@ class AuthMiddleware {
     
     public static function verificarSesion() {
         if (!isset($_SESSION['user_id'])) {
-            header("Location: ../../auth/login.php?error=acceso_denegado");
+            header("Location: index.php?url=login&error=acceso_denegado");
             exit;
         }
     }
 
     public static function verificarRol($rol_requerido) {
         self::verificarSesion();
-        
         if ($_SESSION['rol'] !== $rol_requerido && $_SESSION['rol'] !== 'Admin') {
-            header("Location: ../../auth/login.php?error=rol_invalido");
+            header("Location: index.php?url=login&error=rol_invalido");
             exit;
         }
     }
