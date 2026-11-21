@@ -67,8 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData();
         formData.append('imagen', inputFile.files[0]);
 
-        fetch('index.php?url=upload', {
+        fetch('http://localhost:8080/cxrse-main/app/controllers/UploadController.php', {
             method: 'POST',
+            credentials: 'include',
             body: formData
         })
         .then(response => response.json())

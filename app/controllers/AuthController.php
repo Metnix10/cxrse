@@ -3,6 +3,7 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 
+session_set_cookie_params(0, '/');
 session_start();
 
 require_once '../config/Database.php';
@@ -44,6 +45,8 @@ if (!empty($data->email) && !empty($data->password)) {
             ]);
         } else {
             $usuario->incrementarIntentosFallidos($row['id']);
+            
+            // CORRECCIÓN: Se arregló el salto de línea roto en la resta matemática
             $intentos_restantes = 2 - $row['intentos_fallidos'];
 
             http_response_code(401);

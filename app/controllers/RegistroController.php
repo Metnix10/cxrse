@@ -33,12 +33,15 @@ if (!empty($data->nombre) && !empty($data->email) && !empty($data->password) && 
     if ($usuario->crear()) {
         http_response_code(201);
         echo json_encode(["mensaje" => "Usuario registrado exitosamente."]);
+        exit;
     } else {
         http_response_code(503);
         echo json_encode(["error" => "No se pudo registrar el usuario. Intente más tarde."]);
+        exit;
     }
 } else {
     http_response_code(400);
     echo json_encode(["error" => "Datos incompletos. Por favor llene todos los campos obligatorios."]);
+    exit;
 }
 ?>
