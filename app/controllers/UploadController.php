@@ -1,61 +1,74 @@
 <?php
-//header("Access-Control-Allow-Origin: http://localhost");
-//header("Access-Control-Allow-Credentials: true");
-//header("Content-Type: application/json; charset=UTF-8");
-//header("Access-Control-Allow-Methods: POST, OPTIONS");
-//header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+require_once '../middlewares/CorsMiddleware.php';
 
-//if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-//    http_response_code(200);
-//    exit;
-//}
+CorsMiddleware::manejar();
+header("Content-Type: application/json; charset=UTF-8");
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(["error" => "Método no permitido. Se requiere POST."]);
+    exit;
+}
 
 class UploadController {
-    public function subirImagen() {
+    private $cloudName;
+    private $uploadPreset;
+
+    public function __construct(array $config) {
+        $this->cloudName = $config['cloud_name'] ?? '';
+        $this->uploadPreset = $config['upload_preset'] ?? '';
+    }
+
+    public function subirArchivo() {
+        if ($this->cloudName === '' || $this->uploadPreset === '') {
+            http_response_code(500);
+            echo json_encode(["error" => "Falta configurar las credenciales de Cloudinary en el servidor."]);
+            exit;
+        }
+
         if (!function_exists('curl_init')) {
             http_response_code(500);
             echo json_encode(["error" => "La extensión cURL no está habilitada en php.ini de XAMPP."]);
             exit;
         }
 
-        if (!isset($_FILES['imagen']) || $_FILES['imagen']['error'] !== UPLOAD_ERR_OK) {
+        $archivo = $_FILES['imagen'] ?? $_FILES['archivo'] ?? null;
+
+        if (!$archivo || $archivo['error'] !== UPLOAD_ERR_OK) {
             http_response_code(400);
-            echo json_encode(["error" => "Error al recibir la imagen (código: " . ($_FILES['imagen']['error'] ?? 'sin archivo') . ")."]);
+            echo json_encode(["error" => "Error al recibir el archivo (código: " . ($archivo['error'] ?? 'sin archivo') . ")."]);
             exit;
         }
 
-        $cloud_name = "dkqbijjd";
-        $upload_preset = "cxrse_portadas";
-        $file_tmp_path = $_FILES['imagen']['tmp_name'];
-
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://api.cloudinary.com/v1_1/" . $cloud_name . "/image/upload");
+        curl_setopt($ch, CURLOPT_URL, "https://api.cloudinary.com/v1_1/" . $this->cloudName . "/auto/upload");
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, [
-            'file' => new CURLFile($file_tmp_path),
-            'upload_preset' => $upload_preset
+            'file' => new CURLFile($archivo['tmp_name'], $archivo['type'], $archivo['name']),
+            'upload_preset' => $this->uploadPreset
         ]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Evita bloqueo SSL en XAMPP local
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
         $response = curl_exec($ch);
-        $curl_err = curl_error($ch);
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlErr = curl_error($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        if ($curl_err) {
+        if ($curlErr) {
             http_response_code(500);
-            echo json_encode(["error" => "Error de conexión cURL: " . $curl_err]);
+            echo json_encode(["error" => "Error de conexión cURL: " . $curlErr]);
             exit;
         }
 
         $result = json_decode($response);
 
-        if ($http_code === 200 && isset($result->secure_url)) {
+        if ($httpCode === 200 && isset($result->secure_url)) {
             http_response_code(200);
             echo json_encode([
-                "mensaje" => "Imagen subida exitosamente a Cloudinary",
-                "url_imagen" => $result->secure_url
+                "mensaje" => "Archivo subido exitosamente a Cloudinary",
+                "url_imagen" => $result->secure_url,
+                "url_archivo" => $result->secure_url
             ]);
         } else {
             http_response_code(500);
@@ -64,5 +77,8 @@ class UploadController {
     }
 }
 
-$controller = new UploadController();
-$controller->subirImagen();
+$configPath = __DIR__ . '/../config/cloudinary.php';
+$cloudinaryConfig = file_exists($configPath) ? require $configPath : [];
+
+$controller = new UploadController($cloudinaryConfig);
+$controller->subirArchivo();

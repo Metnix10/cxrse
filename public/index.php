@@ -27,6 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 require_once '../app/config/Database.php';
 require_once '../app/middlewares/AuthMiddleware.php'; 
 
+AuthMiddleware::iniciarSesionSegura();
+
 $url = $_GET['url'] ?? 'home';
 
 switch ($url) {
@@ -78,6 +80,12 @@ switch ($url) {
         $controller = new UploadController();
         $controller->subirImagen();
     break;
+
+    case 'logout':
+        session_unset();
+        session_destroy();
+        header("Location: index.php?url=home");
+        exit();
 
     default:
         http_response_code(404);

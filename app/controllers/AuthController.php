@@ -1,10 +1,17 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST");
+require_once '../middlewares/CorsMiddleware.php';
+require_once '../middlewares/AuthMiddleware.php';
 
-session_set_cookie_params(0, '/');
-session_start();
+CorsMiddleware::manejar();
+header("Content-Type: application/json; charset=UTF-8");
+
+AuthMiddleware::iniciarSesionSegura();
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(["error" => "Método no permitido. Se requiere POST."]);
+    exit;
+}
 
 require_once '../config/Database.php';
 require_once '../models/Usuario.php';
@@ -34,19 +41,20 @@ if (!empty($data->email) && !empty($data->password)) {
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['rol'] = $row['rol'];
             $_SESSION['nombre'] = $row['nombre'];
+            $_SESSION['foto'] = $row['foto'] ?? '';
 
             http_response_code(200);
             echo json_encode([
                 "mensaje" => "Login exitoso",
                 "usuario" => [
                     "nombre" => $row['nombre'],
-                    "rol" => $row['rol']
+                    "rol" => $row['rol'],
+                    "foto" => $_SESSION['foto']
                 ]
             ]);
         } else {
             $usuario->incrementarIntentosFallidos($row['id']);
             
-            // CORRECCIÓN: Se arregló el salto de línea roto en la resta matemática
             $intentos_restantes = 2 - $row['intentos_fallidos'];
 
             http_response_code(401);

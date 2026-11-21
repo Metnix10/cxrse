@@ -4,32 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reproductor de Curso - Cxrse</title>
-    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/global.css?v=2">
     <link rel="stylesheet" href="css/reproductor.css">
 </head>
 <body>
 
-    <header class="navbar">
-        <div class="nav-container">
-            <a href="index.php?url=home" class="logo">
-                <img src="img/logo.png" alt="Logo Cxrse">
-            </a>
-            
-            <nav class="nav-links">
-                <a href="index.php?url=home">Cursos</a>
-                <a href="index.php?url=kardex" class="active">Kardex</a>
-                <a href="index.php?url=instructor">Instructor</a>
-                <a href="index.php?url=admin">Admin</a>
-            </nav>
-
-            <div class="user-profile-menu">
-                <a href="index.php?url=perfil" class="avatar-link">
-                    <img src="https://picsum.photos/40" alt="Avatar Usuario" class="user-avatar">
-                    <span class="user-name">Milton Torres</span>
-                </a>
-            </div>
-        </div>
-    </header>
+    <?php require_once __DIR__ . '/../layouts/navbar.php'; ?>
 
     <main class="player-layout">
         

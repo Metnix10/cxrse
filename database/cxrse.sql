@@ -135,3 +135,44 @@ ALTER TABLE `inscripciones`
 ALTER TABLE `niveles`
   ADD CONSTRAINT `niveles_ibfk_1` FOREIGN KEY (`curso_id`) REFERENCES `cursos` (`id`) ON DELETE CASCADE;
 COMMIT;
+
+ALTER TABLE `usuarios`
+  ADD COLUMN `fecha_actualizacion` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() AFTER `fecha_registro`;
+
+ALTER TABLE `categorias`
+  ADD COLUMN `usuario_id` int(11) DEFAULT NULL AFTER `descripcion`,
+  ADD CONSTRAINT `categorias_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL;
+
+ALTER TABLE `niveles`
+  ADD COLUMN `precio` decimal(10,2) NOT NULL DEFAULT 0.00 AFTER `video_url`,
+  ADD COLUMN `pdf_url` varchar(255) DEFAULT NULL AFTER `precio`,
+  ADD COLUMN `link_externo` varchar(255) DEFAULT NULL AFTER `pdf_url`,
+  ADD COLUMN `imagen_url` varchar(255) DEFAULT NULL AFTER `link_externo`;
+
+
+ALTER TABLE `inscripciones`
+  ADD COLUMN `nivel_id` int(11) DEFAULT NULL AFTER `curso_id`,
+  ADD COLUMN `fecha_terminacion` datetime DEFAULT NULL AFTER `estatus_curso`,
+  ADD CONSTRAINT `inscripciones_ibfk_3` FOREIGN KEY (`nivel_id`) REFERENCES `niveles` (`id`) ON DELETE SET NULL;
+
+ALTER TABLE `comentarios`
+  ADD COLUMN `calificacion` tinyint(1) NOT NULL DEFAULT 5 AFTER `comentario`,
+  ADD COLUMN `eliminado` tinyint(1) NOT NULL DEFAULT 0 AFTER `fecha_envio`,
+  ADD COLUMN `fecha_eliminacion` datetime DEFAULT NULL AFTER `eliminado`,
+  ADD COLUMN `causa_eliminacion` varchar(255) DEFAULT NULL AFTER `fecha_eliminacion`;
+
+CREATE TABLE `mensajes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `curso_id` int(11) NOT NULL,
+  `remitente_id` int(11) NOT NULL,
+  `destinatario_id` int(11) NOT NULL,
+  `mensaje` text NOT NULL,
+  `fecha_envio` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `curso_id` (`curso_id`),
+  KEY `remitente_id` (`remitente_id`),
+  KEY `destinatario_id` (`destinatario_id`),
+  CONSTRAINT `mensajes_ibfk_1` FOREIGN KEY (`curso_id`) REFERENCES `cursos` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `mensajes_ibfk_2` FOREIGN KEY (`remitente_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `mensajes_ibfk_3` FOREIGN KEY (`destinatario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

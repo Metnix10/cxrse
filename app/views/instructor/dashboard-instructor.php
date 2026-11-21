@@ -9,32 +9,12 @@ AuthMiddleware::verificarRol('Instructor');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Instructor - Cxrse</title>
-    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/global.css?v=2">
     <link rel="stylesheet" href="css/dashboard-instructor.css">
 </head>
 <body>
 
-    <header class="navbar">
-        <div class="nav-container">
-            <a href="index.php?url=home" class="logo">
-                <img src="img/logo.png" alt="Logo Cxrse">
-            </a>
-            
-            <nav class="nav-links">
-                <a href="index.php?url=home">Cursos</a>
-                <a href="index.php?url=kardex">Kardex</a>
-                <a href="index.php?url=instructor" class="active">Instructor</a>
-                <a href="index.php?url=admin">Admin</a>
-            </nav>
-
-            <div class="user-profile-menu">
-                <a href="index.php?url=perfil" class="avatar-link">
-                    <img src="https://picsum.photos/40" alt="Avatar Instructor" class="user-avatar">
-                    <span class="user-name">Carlos López (Instructor)</span>
-                </a>
-            </div>
-        </div>
-    </header>
+    <?php require_once __DIR__ . '/../layouts/navbar.php'; ?>
 
     <main class="dashboard-container">
         
