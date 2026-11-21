@@ -82,7 +82,6 @@ class Curso {
 
         $sql .= " GROUP BY c.id";
 
-        // Ordenamiento para portada: mejor calificados, más vendidos o más recientes
         $orden = $filtros['orden'] ?? 'recientes';
         if ($orden === 'calificados') {
             $sql .= " ORDER BY promedio_calificacion DESC";
@@ -124,5 +123,39 @@ class Curso {
         $curso['niveles'] = $stmtNiv->fetchAll(PDO::FETCH_ASSOC);
 
         return $curso;
+    }
+
+    public function obtenerReporteInstructor($instructorId) {
+        $sql = "SELECT c.id, c.titulo, c.precio, c.estatus, DATE(c.fecha_creacion) AS fecha_creacion,
+                       cat.nombre AS categoria_nombre,
+                       (SELECT COUNT(*) FROM niveles n WHERE n.curso_id = c.id) AS total_niveles,
+                       COUNT(ins.id) AS total_alumnos,
+                       COALESCE(AVG(ins.nivel_actual), 0) AS nivel_promedio,
+                       COALESCE(SUM(ins.precio_pagado), 0) AS total_ingresos
+                FROM cursos c
+                INNER JOIN categorias cat ON c.categoria_id = cat.id
+                LEFT JOIN inscripciones ins ON c.id = ins.curso_id
+                WHERE c.instructor_id = :instructor_id
+                GROUP BY c.id
+                ORDER BY c.fecha_creacion DESC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':instructor_id' => $instructorId]);
+        $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $sqlAlumnos = "SELECT ins.id, u.nombre AS alumno_nombre,
+                              DATE_FORMAT(ins.fecha_inscripcion, '%d-%b-%Y') AS fecha_inscripcion,
+                              ins.nivel_actual, ins.avance_porcentaje, ins.precio_pagado, ins.forma_pago
+                       FROM inscripciones ins
+                       INNER JOIN usuarios u ON ins.usuario_id = u.id
+                       WHERE ins.curso_id = :curso_id
+                       ORDER BY ins.fecha_inscripcion DESC";
+        $stmtAlumnos = $this->conn->prepare($sqlAlumnos);
+
+        foreach ($cursos as &$curso) {
+            $stmtAlumnos->execute([':curso_id' => $curso['id']]);
+            $curso['alumnos'] = $stmtAlumnos->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return $cursos;
     }
 }

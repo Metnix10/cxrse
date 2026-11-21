@@ -38,6 +38,40 @@ class CursoController {
                     echo json_encode($this->cursoModel->buscarActivos($_GET));
                 }
 
+            } elseif ($method === 'GET' && $recurso === 'reporte-instructor') {
+                AuthMiddleware::verificarApi('Instructor');
+                $reporte = $this->cursoModel->obtenerReporteInstructor($_SESSION['user_id']);
+                http_response_code(200);
+                echo json_encode($reporte);
+
+            } elseif ($method === 'GET' && $recurso === 'estado-inscripcion') {
+                AuthMiddleware::iniciarSesionSegura();
+                if (!isset($_SESSION['user_id'])) {
+                    http_response_code(200);
+                    echo json_encode([]);
+                    return;
+                }
+                $cursoId = (int)($_GET['curso_id'] ?? 0);
+                http_response_code(200);
+                echo json_encode($this->inscripcionModel->obtenerInscripcionesUsuarioCurso($_SESSION['user_id'], $cursoId));
+
+            } elseif ($method === 'GET' && $recurso === 'kardex') {
+                AuthMiddleware::verificarApi('Estudiante');
+                http_response_code(200);
+                echo json_encode($this->inscripcionModel->obtenerKardexUsuario($_SESSION['user_id']));
+
+            } elseif ($method === 'GET' && $recurso === 'reproductor') {
+                AuthMiddleware::verificarApi('Estudiante');
+                $cursoId = (int)($_GET['curso_id'] ?? 0);
+                $detalle = $this->inscripcionModel->obtenerDetalleReproductor($_SESSION['user_id'], $cursoId);
+                if (!$detalle) {
+                    http_response_code(403);
+                    echo json_encode(["error" => "No tienes acceso a este curso."]);
+                    return;
+                }
+                http_response_code(200);
+                echo json_encode($detalle);
+
             } elseif ($method === 'POST' && $recurso === 'cursos') {
                 AuthMiddleware::verificarApi('Instructor');
                 $data = json_decode(file_get_contents("php://input"), true);
@@ -78,10 +112,10 @@ class CursoController {
                     return;
                 }
 
-                $formasValidas = ['Tarjeta', 'PayPal', 'Transferencia', 'Gratis'];
+                $formasValidas = ['PayPal', 'Efectivo', 'Gratis'];
                 if (empty($data['curso_id']) || empty($data['forma_pago']) || !in_array($data['forma_pago'], $formasValidas, true)) {
                     http_response_code(400);
-                    echo json_encode(["error" => "Curso y forma de pago válida (Tarjeta, PayPal, Transferencia o Gratis) requeridos."]);
+                    echo json_encode(["error" => "Curso y forma de pago válida (PayPal o Efectivo) requeridos."]);
                     return;
                 }
 

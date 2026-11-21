@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 alert('¡Curso creado exitosamente!');
-                window.location.href = 'index.php?url=dashboard-instructor';
+                window.location.href = 'index.php?url=instructor';
 
             } catch (error) {
                 console.error('Error al crear curso:', error);

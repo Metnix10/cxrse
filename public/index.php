@@ -56,6 +56,7 @@ switch ($url) {
         break;
 
     case 'instructor':
+    case 'dashboard-instructor':
         AuthMiddleware::verificarRol('Instructor');
         require_once '../app/views/instructor/dashboard-instructor.php';
         break;
@@ -63,6 +64,15 @@ switch ($url) {
     case 'crear-curso':
         AuthMiddleware::verificarRol('Instructor');
         require_once '../app/views/instructor/crear-curso.php';
+        break;
+
+    case 'detalle-curso':
+        require_once '../app/views/cursos/detalle-curso.php';
+        break;
+
+    case 'diploma':
+        AuthMiddleware::verificarRol('Estudiante');
+        require_once '../app/views/cursos/diploma.php';
         break;
 
     case 'admin':

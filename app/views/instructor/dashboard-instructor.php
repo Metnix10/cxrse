@@ -44,9 +44,6 @@ AuthMiddleware::verificarRol('Instructor');
                     <label for="filterCategory">Categoría:</label>
                     <select id="filterCategory">
                         <option value="all">Todas las categorías</option>
-                        <option value="Desarrollo Web">Desarrollo Web</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="IT & Software">IT & Software</option>
                     </select>
                 </div>
 
@@ -78,42 +75,12 @@ AuthMiddleware::verificarRol('Instructor');
                             <th>Alumnos Inscritos</th>
                             <th>Nivel Promedio</th>
                             <th>Total Ingresos</th>
-                            <th>Detalle</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="summaryTableBody">
-                        <tr data-category="Desarrollo Web" data-status="active" data-date="2026-08-10">
-                            <td><strong>Master en HTML, CSS y JavaScript</strong></td>
-                            <td><span class="badge">Desarrollo Web</span></td>
-                            <td><span class="badge badge-active">Activo</span></td>
-                            <td>120</td>
-                            <td>Nivel 3.4</td>
-                            <td class="amount font-bold">$59,880.00 MXN</td>
-                            <td>
-                                <button class="btn-view-detail" data-course="1">Ver Alumnos</button>
-                            </td>
-                        </tr>
-                        <tr data-category="Marketing" data-status="active" data-date="2026-07-15">
-                            <td><strong>Estrategias de Marketing Digital</strong></td>
-                            <td><span class="badge">Marketing</span></td>
-                            <td><span class="badge badge-active">Activo</span></td>
-                            <td>75</td>
-                            <td>Nivel 2.1</td>
-                            <td class="amount font-bold">$22,425.00 MXN</td>
-                            <td>
-                                <button class="btn-view-detail" data-course="2">Ver Alumnos</button>
-                            </td>
-                        </tr>
-                        <tr data-category="IT & Software" data-status="inactive" data-date="2026-04-01">
-                            <td><strong>Introducción a PHP Puro (Baja Lógica)</strong></td>
-                            <td><span class="badge">IT & Software</span></td>
-                            <td><span class="badge badge-inactive">Dado de baja</span></td>
-                            <td>15</td>
-                            <td>Nivel 4.0</td>
-                            <td class="amount font-bold">$4,500.00 MXN</td>
-                            <td>
-                                <button class="btn-view-detail" data-course="3">Ver Alumnos</button>
-                            </td>
+                        <tr>
+                            <td colspan="7" style="text-align:center;">Cargando cursos...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -122,29 +89,25 @@ AuthMiddleware::verificarRol('Instructor');
             <div class="payment-breakdown-card">
                 <h3>Total de Ingresos Desglosado por Forma de Pago</h3>
                 <div class="breakdown-grid">
-                    <div class="breakdown-item">
-                        <span class="payment-method">Tarjeta de Crédito / Débito:</span>
-                        <span class="payment-amount">$52,305.00 MXN</span>
-                    </div>
-                    <div class="breakdown-item">
-                        <span class="payment-method">PayPal:</span>
-                        <span class="payment-amount">$28,500.00 MXN</span>
-                    </div>
-                    <div class="breakdown-item">
-                        <span class="payment-method">Transferencia SPEI:</span>
-                        <span class="payment-amount">$6,000.00 MXN</span>
-                    </div>
-                    <div class="breakdown-item breakdown-total">
-                        <span class="payment-method">TOTAL ACUMULADO:</span>
-                        <span class="payment-amount">$86,805.00 MXN</span>
-                    </div>
-                </div>
+    <div class="breakdown-item">
+        <span class="payment-method">PayPal:</span>
+        <span class="payment-amount" id="totalPaypal">$0.00 MXN</span>
+    </div>
+    <div class="breakdown-item">
+        <span class="payment-method">Efectivo:</span>
+        <span class="payment-amount" id="totalEfectivo">$0.00 MXN</span>
+    </div>
+    <div class="breakdown-item breakdown-total">
+        <span class="payment-method">TOTAL ACUMULADO:</span>
+        <span class="payment-amount" id="totalAcumulado">$0.00 MXN</span>
+    </div>
+</div>
             </div>
         </section>
 
         <section class="report-section" id="detailSection">
             <div class="section-title-bar">
-                <h2>2. Detalle de Alumnos Inscritos: <span id="selectedCourseName">Master en HTML, CSS y JavaScript</span></h2>
+                <h2>2. Detalle de Alumnos Inscritos: <span id="selectedCourseName">Selecciona un curso</span></h2>
             </div>
 
             <div class="table-wrapper">
@@ -160,25 +123,7 @@ AuthMiddleware::verificarRol('Instructor');
                     </thead>
                     <tbody id="detailTableBody">
                         <tr>
-                            <td>Milton Torres</td>
-                            <td>10-Ago-2026</td>
-                            <td>Nivel 3 (60%)</td>
-                            <td class="amount">$499.00 MXN</td>
-                            <td>Tarjeta de Crédito</td>
-                        </tr>
-                        <tr>
-                            <td>María Fernández</td>
-                            <td>12-Ago-2026</td>
-                            <td>Nivel 5 (100%)</td>
-                            <td class="amount">$499.00 MXN</td>
-                            <td>PayPal</td>
-                        </tr>
-                        <tr>
-                            <td>Jorge Ramírez</td>
-                            <td>18-Ago-2026</td>
-                            <td>Nivel 1 (20%)</td>
-                            <td class="amount">$499.00 MXN</td>
-                            <td>Transferencia SPEI</td>
+                            <td colspan="5" style="text-align:center;">Haz clic en "Ver Alumnos" en algún curso de la tabla superior.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -186,12 +131,30 @@ AuthMiddleware::verificarRol('Instructor');
 
             <div class="course-total-bar">
                 <span>Total generado por este curso:</span>
-                <span class="total-amount">$59,880.00 MXN</span>
+                <span class="total-amount" id="selectedCourseTotal">$0.00 MXN</span>
+            </div>
+        </section>
+
+        <section class="report-section" id="messagesSection">
+            <h2>3. Mensajes Privados de Alumnos</h2>
+            <div style="display:grid; grid-template-columns: 300px 1fr; gap:16px; margin-top:14px;">
+                <div id="instructorThreadsList" style="border:1px solid #e5e7eb; border-radius:8px; padding:10px; background:#f9fafb; max-height:340px; overflow-y:auto;">
+                    <p style="font-size:13px; color:#6b7280;">Cargando conversaciones...</p>
+                </div>
+                <div style="border:1px solid #e5e7eb; border-radius:8px; padding:14px; display:flex; flex-direction:column; justify-content:space-between; min-height:300px;">
+                    <div id="instructorChatHistory" style="max-height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
+                        <p style="font-size:13px; color:#6b7280;">Selecciona una conversación a la izquierda para responder.</p>
+                    </div>
+                    <form id="instructorReplyForm" style="display:none; gap:8px;">
+                        <input type="text" id="instructorReplyInput" placeholder="Escribe tu respuesta al alumno..." required style="flex:1; padding:10px; border:1px solid #d1d5db; border-radius:6px;">
+                        <button type="submit" class="btn-filter">Responder</button>
+                    </form>
+                </div>
             </div>
         </section>
 
     </main>
 
-    <script src="js/dashboard-instructor.js"></script>
+    <script src="js/dashboard-instructor.js?v=4"></script>
 </body>
 </html>

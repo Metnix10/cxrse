@@ -16,83 +16,86 @@
         <section class="main-player-content">
             
             <div class="video-container">
-                <video id="courseVideo" controls poster="https://via.placeholder.com/800x450?text=Cargando+Video...">
-                    <source src="uploads/videos/ejemplo.mp4" type="video/mp4">
+                <video id="courseVideo" controls>
                     Tu navegador no soporta el reproductor de video.
                 </video>
             </div>
 
             <div class="lesson-info">
-                <span class="lesson-badge">Nivel 1</span>
-                <h1 id="lessonTitle">Master en HTML, CSS y JavaScript desde Cero</h1>
-                <p id="lessonDescription">En esta lección aprenderás las etiquetas fundamentales para estructurar tu primera página web.</p>
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+                    <span class="lesson-badge" id="lessonBadge">Nivel 1</span>
+                    <button type="button" id="btnCompleteLevel" class="btn-download" style="background-color:#10b981; border:none; cursor:pointer;">
+                        Marcar nivel como completado
+                    </button>
+                </div>
 
-                <div class="resources-card">
-                    <h3>Material</h3>
-                    <a href="uploads/pdf/guia-clase.pdf" download class="btn-download">Descargar Guía en PDF</a>
+                <h1 id="lessonTitle">Cargando clase...</h1>
+                <p id="lessonDescription"></p>
+
+                <div class="resources-card" id="resourcesCard" style="display: none;">
+                    <h3>Material Complementario</h3>
+                    <div id="resourcesLinks" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
                 </div>
             </div>
 
             <div class="comments-section">
-                <h2>Preguntas o Comentarios al Instructor</h2>
-                <p class="comments-subtitle">¿Tienes alguna duda sobre este nivel? Escríbela aquí y el instructor te responderá.</p>
+                <div style="display:flex; gap:10px; margin-bottom:14px; border-bottom:1px solid #e5e7eb; padding-bottom:10px;">
+                    <button type="button" id="tabChatPrivado" class="btn-submit-comment" style="background-color:#2563eb;">Mensaje Privado al Instructor</button>
+                    <button type="button" id="tabResenasCurso" class="btn-submit-comment" style="background-color:#6b7280;">Calificar y Comentar Curso</button>
+                </div>
 
-                <form id="commentForm">
-                    <textarea id="commentText" rows="3" required></textarea>
-                    <button type="submit" class="btn-submit-comment">Enviar Mensaje</button>
-                </form>
+                <div id="panelChatPrivado">
+                    <p class="comments-subtitle">Conversación privada directa con el instructor de este curso.</p>
+                    <div id="chatMessagesList" style="max-height:260px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; margin-bottom:14px; padding:10px; background:#f9fafb; border-radius:8px; border:1px solid #e5e7eb;"></div>
+                    <form id="privateMessageForm">
+                        <textarea id="privateMessageText" rows="2" placeholder="Escribe un mensaje privado para tu instructor..." required></textarea>
+                        <button type="submit" class="btn-submit-comment">Enviar Mensaje Privado</button>
+                    </form>
+                </div>
 
-                <hr class="comments-divider">
-
-                <div id="commentsList">
-                    <div class="comment-item">
-                    </div>
+                <div id="panelResenasCurso" style="display:none;">
+                    <p class="comments-subtitle">Comparte tu opinión y calificación (1 a 5 estrellas) sobre este curso.</p>
+                    <form id="commentForm">
+                        <div style="margin-bottom:10px;">
+                            <label for="ratingSelect" style="font-weight:600; font-size:14px;">Calificación: </label>
+                            <select id="ratingSelect" style="padding:6px 10px; border-radius:6px; border:1px solid #d1d5db;">
+                                <option value="5">★★★★★ (5 - Excelente)</option>
+                                <option value="4">★★★★☆ (4 - Muy bueno)</option>
+                                <option value="3">★★★☆☆ (3 - Bueno)</option>
+                                <option value="2">★★☆☆☆ (2 - Regular)</option>
+                                <option value="1">★☆☆☆☆ (1 - Malo)</option>
+                            </select>
+                        </div>
+                        <textarea id="commentText" rows="3" placeholder="Escribe tu reseña del curso..." required></textarea>
+                        <button type="submit" class="btn-submit-comment">Publicar Reseña</button>
+                    </form>
+                    <hr class="comments-divider">
+                    <div id="commentsList"></div>
                 </div>
             </div>
 
         </section>
 
         <aside class="sidebar-playlist">
-            <h2>Contenido del Curso</h2>
+            <h2 id="courseSidebarTitle">Contenido del Curso</h2>
             
-            <div class="levels-list">
-                
-                <div class="level-item active">
-                    <div>
-                        <strong>Nivel 1: Introducción a HTML</strong>
-                        <span class="level-duration">12 min</span>
-                    </div>
-                    <span class="active">O</span>
-                </div>
-
-                <div class="level-item">
-                    <div>
-                        <strong>Nivel 2: Estilos CSS y Flexbox</strong>
-                        <span class="level-duration">25 min</span>
-                    </div>
-                    <span class="locked">-</span>
-                </div>
-
-                <div class="level-item">
-                    <div>
-                        <strong>Nivel 3: Fundamentos de JS</strong>
-                        <span class="level-duration">40 min</span>
-                    </div>
-                    <span class="locked">-</span>
-                </div>
-
+            <div class="levels-list" id="levelsList">
+                <p>Cargando niveles...</p>
             </div>
 
             <div class="progress-section">
-                <label>Tu avance general: 33%</label>
+                <label id="progressLabel">Tu avance general: 0%</label>
                 <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" style="width: 33%;"></div>
+                    <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
                 </div>
+                <a id="btnDiplomaPlayer" href="#" class="btn-download" style="display:none; text-align:center; margin-top:14px; background-color:#2563eb;">
+                    Ver Diploma Obtenido
+                </a>
             </div>
         </aside>
 
     </main>
 
-    <script src="js/reproductor.js"></script>
+    <script src="js/reproductor.js?v=3"></script>
 </body>
 </html>

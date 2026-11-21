@@ -104,6 +104,6 @@ AuthMiddleware::verificarVista('Instructor');
 
     </main>
 
-    <script src="js/crear-curso.js"></script>
+    <script src="js/crear-curso.js?v=2"></script>
 </body>
 </html>
