@@ -96,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // 3. Dibujar tarjetas en el DOM
     function renderizarCursos(lista) {
         if (!coursesContainer) return;
 
@@ -118,8 +117,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const titulo = escaparHTML(curso.titulo);
             const categoria = escaparHTML(curso.categoria || curso.categoria_nombre || 'General');
             const instructor = escaparHTML(curso.instructor || curso.instructor_nombre || 'Instructor');
-            const rating = parseFloat(curso.calificacion_promedio ?? curso.rating ?? 0);
-            const alumnos = parseInt(curso.total_alumnos ?? curso.ventas ?? 0, 10);
+            const rating = parseFloat(curso.promedio_calificacion ?? curso.calificacion_promedio ?? 0);
+            const alumnos = parseInt(curso.total_alumnos ?? curso.total_inscritos ?? 0, 10);
             const fechaRaw = (curso.fecha_creacion || curso.created_at || '').split(' ')[0];
             const imagen = (curso.imagen && curso.imagen.startsWith('http'))
                 ? escaparHTML(curso.imagen)
@@ -149,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="course-rating">
                             <span class="stars">${generarEstrellas(rating)}</span>
                             <span class="rating-score">${rating.toFixed(1)}</span>
-                            <span class="rating-count">(${alumnos} alumnos)</span>
+                            <span class="rating-count">(${alumnos} ${alumnos === 1 ? 'alumno' : 'alumnos'})</span>
                         </div>
                         <div class="course-footer">
                             ${formatearPrecio(curso.precio)}
@@ -161,7 +160,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }).join('');
     }
 
-    // 4. Filtrar y ordenar sobre los datos cargados
     function aplicarFiltrosYOrden() {
         const query = (searchInput?.value || '').toLowerCase().trim();
         const categoriaSel = filterCategory?.value || '';
@@ -186,10 +184,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         filtrados.sort((a, b) => {
             if (criterioOrdenActual === 'best-rated') {
-                return parseFloat(b.calificacion_promedio ?? b.rating ?? 0) - parseFloat(a.calificacion_promedio ?? a.rating ?? 0);
+                return parseFloat(b.promedio_calificacion ?? b.calificacion_promedio ?? 0) - parseFloat(a.promedio_calificacion ?? a.calificacion_promedio ?? 0);
             }
             if (criterioOrdenActual === 'best-sellers') {
-                return parseInt(b.total_alumnos ?? b.ventas ?? 0, 10) - parseInt(a.total_alumnos ?? a.ventas ?? 0, 10);
+                return parseInt(b.total_alumnos ?? b.total_inscritos ?? 0, 10) - parseInt(a.total_alumnos ?? a.total_inscritos ?? 0, 10);
             }
             if (criterioOrdenActual === 'recent') {
                 return new Date(b.fecha_creacion || b.created_at || 0) - new Date(a.fecha_creacion || a.created_at || 0);

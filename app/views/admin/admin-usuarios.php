@@ -38,36 +38,7 @@
                         </tr>
                     </thead>
                     <tbody id="userControlTable">
-                        <tr>
-                            <td>milton@gmail.com</td>
-                            <td>Milton Torres</td>
-                            <td><span class="role-badge role-student">Estudiante</span></td>
-                            <td>0</td>
-                            <td><span class="status-badge status-active">Activo</span></td>
-                            <td>
-                                <button class="btn-action btn-block" onclick="toggleUserStatus(this)">Bloquear</button>
-                            </td>
-                        </tr>
-                        <tr class="blocked-row">
-                            <td>juan.perez@outlook.com</td>
-                            <td>Juan Pérez</td>
-                            <td><span class="role-badge role-student">Estudiante</span></td>
-                            <td class="failed-attempts">3 (Límite superado)</td>
-                            <td><span class="status-badge status-blocked">Deshabilitado</span></td>
-                            <td>
-                                <button class="btn-action btn-unblock" onclick="toggleUserStatus(this)">Desbloquear</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>carlos.instructor@outloik.com</td>
-                            <td>Carlos López</td>
-                            <td><span class="role-badge role-instructor">Instructor</span></td>
-                            <td>0</td>
-                            <td><span class="status-badge status-active">Activo</span></td>
-                            <td>
-                                <button class="btn-action btn-block" onclick="toggleUserStatus(this)">Bloquear</button>
-                            </td>
-                        </tr>
+                        <tr><td colspan="6" style="text-align:center;">Cargando usuarios...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -96,8 +67,29 @@
             </div>
         </section>
 
+        <section class="admin-card">
+            <h2>3. Moderación de Comentarios de Cursos</h2>
+            <p style="font-size:14px; color:#6b7280; margin-bottom:14px;">Da de baja comentarios inapropiados registrando la causa de eliminación.</p>
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Curso</th>
+                            <th>Alumno</th>
+                            <th>Calificación</th>
+                            <th>Comentario</th>
+                            <th>Estatus</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="commentsModerationBody">
+                        <tr><td colspan="6" style="text-align:center;">Cargando comentarios...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </main>
 
-    <script src="js/admin-usuarios.js"></script>
+    <script src="js/admin-usuarios.js?v=2"></script>
 </body>
 </html>

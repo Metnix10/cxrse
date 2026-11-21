@@ -47,11 +47,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
             renderizarDetalle(cursoActual);
             actualizarTotal();
+            await cargarResenasPublicas();
         } catch (error) {
             console.error(error);
             document.getElementById('cursoTitulo').textContent = 'Curso no disponible';
             nivelesList.innerHTML = `<p style="color:#dc2626;">${escaparHTML(error.message)}</p>`;
             purchaseForm.style.display = 'none';
+        }
+    }
+
+    async function cargarResenasPublicas() {
+        const reviewsList = document.getElementById('publicReviewsList');
+        if (!reviewsList) return;
+
+        try {
+            const res = await fetch(`../app/controllers/InteraccionController.php?recurso=comentarios&curso_id=${cursoId}`);
+            const comentarios = await res.json();
+
+            if (!Array.isArray(comentarios) || comentarios.length === 0) {
+                reviewsList.innerHTML = '<p style="color:#6b7280; font-size:14px;">Este curso aún no tiene reseñas publicadas.</p>';
+                return;
+            }
+
+            reviewsList.innerHTML = comentarios.map(c => {
+                const calif = Math.max(1, Math.min(5, parseInt(c.calificacion, 10) || 5));
+                const stars = '★'.repeat(calif) + '☆'.repeat(5 - calif);
+                return `
+                    <div class="nivel-item" style="flex-direction: column; align-items: flex-start; gap: 6px;">
+                        <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+                            <strong>${escaparHTML(c.usuario_nombre)} <span style="color:#f59e0b; margin-left:6px;">${stars}</span></strong>
+                            <small style="color:#6b7280;">${escaparHTML(c.fecha)}</small>
+                        </div>
+                        <p style="margin:0; font-size:14px; color:#374151;">${escaparHTML(c.comentario)}</p>
+                    </div>
+                `;
+            }).join('');
+        } catch (err) {
+            reviewsList.innerHTML = '<p style="color:#dc2626; font-size:14px;">No se pudieron cargar las reseñas.</p>';
         }
     }
 

@@ -103,6 +103,6 @@
         <p>&copy; 2026 Cxrse </p>
     </footer>
 
-    <script src="js/index.js?v=2"></script>
+    <script src="js/index.js?v=4"></script>
 </body>
 </html>

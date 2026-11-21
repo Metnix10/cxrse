@@ -39,6 +39,14 @@
             </section>
         </div>
 
+        <section class="content-card" style="margin-top: 24px;">
+                <h2>Opiniones y Calificaciones de Estudiantes</h2>
+                <p class="section-subtitle">Reseñas verificadas de alumnos inscritos en este curso.</p>
+                <div id="publicReviewsList" class="niveles-list">
+                    <p>Cargando reseñas...</p>
+                </div>
+            </section>
+
         <aside class="detail-sidebar">
             <div class="purchase-card">
                 <img id="cursoImagen" src="https://via.placeholder.com/400x220?text=Curso" alt="Portada del curso" class="purchase-cover">
@@ -89,6 +97,6 @@
             rol: <?= json_encode($_SESSION['rol'] ?? '') ?>
         };
     </script>
-    <script src="js/detalle-curso.js"></script>
+    <script src="js/detalle-curso.js?v=3"></script>
 </body>
 </html>

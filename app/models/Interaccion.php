@@ -95,4 +95,32 @@ class Interaccion {
         ]);
         return $this->conn->lastInsertId();
     }
+
+    public function listarTodosComentariosAdmin() {
+        $sql = "SELECT com.id, com.comentario, com.calificacion, com.eliminado, com.causa_eliminacion,
+                       DATE_FORMAT(com.fecha_envio, '%d-%b-%Y %H:%i') AS fecha_envio,
+                       c.titulo AS curso_titulo,
+                       u.nombre AS alumno_nombre, u.email AS alumno_email
+                FROM comentarios com
+                INNER JOIN cursos c ON com.curso_id = c.id
+                INNER JOIN usuarios u ON com.usuario_id = u.id
+                ORDER BY com.eliminado ASC, com.id DESC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function bajaLogicaComentario($comentarioId, $causa) {
+        $sql = "UPDATE comentarios
+                SET eliminado = 1,
+                    fecha_eliminacion = NOW(),
+                    causa_eliminacion = :causa
+                WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            ':id'    => $comentarioId,
+            ':causa' => trim($causa)
+        ]);
+        return $stmt->rowCount() > 0;
+    }
 }

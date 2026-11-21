@@ -62,33 +62,7 @@
                             </tr>
                         </thead>
                         <tbody id="categoriesTableBody">
-                            <tr data-id="1">
-                                <td><strong>Desarrollo Web</strong></td>
-                                <td>Cursos de HTML, CSS, JavaScript, PHP, etc.</td>
-                                <td>18-Sep-2026</td>
-                                <td>
-                                    <button class="btn-action btn-edit" onclick="editCategory(1, 'Desarrollo Web', 'Cursos de HTML, CSS, JavaScript, PHP, etc.')">Editar</button>
-                                    <button class="btn-action btn-delete" onclick="deleteCategory(1)">Eliminar</button>
-                                </td>
-                            </tr>
-                            <tr data-id="2">
-                                <td><strong>Design</strong></td>
-                                <td>Diseño UI/UX, Figma, Ilustración</td>
-                                <td>18-Sep-2026</td>
-                                <td>
-                                    <button class="btn-action btn-edit" onclick="editCategory(2, 'Design', 'Diseño UI/UX, Figma, Ilustración')">Editar</button>
-                                    <button class="btn-action btn-delete" onclick="deleteCategory(2)">Eliminar</button>
-                                </td>
-                            </tr>
-                            <tr data-id="3">
-                                <td><strong>IT & Software</strong></td>
-                                <td>Redes, Seguridad y Sistemas Operativos</td>
-                                <td>18-Sep-2026</td>
-                                <td>
-                                    <button class="btn-action btn-edit" onclick="editCategory(3, 'IT & Software', 'Redes, Seguridad y Sistemas Operativos')">Editar</button>
-                                    <button class="btn-action btn-delete" onclick="deleteCategory(3)">Eliminar</button>
-                                </td>
-                            </tr>
+                            <tr><td colspan="4" style="text-align:center;">Cargando categorías...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -98,6 +72,6 @@
 
     </main>
 
-    <script src="js/admin-categorias.js"></script>
+    <script src="js/admin-categorias.js?v=2"></script>
 </body>
 </html>

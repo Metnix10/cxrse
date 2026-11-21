@@ -52,13 +52,24 @@ class Curso {
 
     public function buscarActivos($filtros = []) {
         $sql = "SELECT c.*, u.nombre AS instructor_nombre, cat.nombre AS categoria_nombre,
-                       COALESCE(AVG(CASE WHEN com.eliminado = 0 THEN com.calificacion END), 0) AS promedio_calificacion,
-                       COUNT(DISTINCT ins.id) AS total_inscritos
+                       COALESCE((
+                           SELECT ROUND(AVG(com.calificacion), 1)
+                           FROM comentarios com
+                           WHERE com.curso_id = c.id AND com.eliminado = 0
+                       ), 0) AS promedio_calificacion,
+                       (
+                           SELECT COUNT(DISTINCT ins.usuario_id)
+                           FROM inscripciones ins
+                           WHERE ins.curso_id = c.id
+                       ) AS total_alumnos,
+                       (
+                           SELECT COUNT(DISTINCT ins.id)
+                           FROM inscripciones ins
+                           WHERE ins.curso_id = c.id
+                       ) AS total_inscritos
                 FROM cursos c
                 INNER JOIN usuarios u ON c.instructor_id = u.id
                 INNER JOIN categorias cat ON c.categoria_id = cat.id
-                LEFT JOIN comentarios com ON c.id = com.curso_id
-                LEFT JOIN inscripciones ins ON c.id = ins.curso_id
                 WHERE c.estatus = 'Activo'";
         $params = [];
 
@@ -80,13 +91,11 @@ class Curso {
             $params[':fecha_fin'] = $filtros['fecha_fin'];
         }
 
-        $sql .= " GROUP BY c.id";
-
         $orden = $filtros['orden'] ?? 'recientes';
-        if ($orden === 'calificados') {
-            $sql .= " ORDER BY promedio_calificacion DESC";
-        } elseif ($orden === 'vendidos') {
-            $sql .= " ORDER BY total_inscritos DESC";
+        if ($orden === 'calificados' || $orden === 'mejor_calificados') {
+            $sql .= " ORDER BY promedio_calificacion DESC, c.fecha_creacion DESC";
+        } elseif ($orden === 'vendidos' || $orden === 'mas_vendidos') {
+            $sql .= " ORDER BY total_alumnos DESC, c.fecha_creacion DESC";
         } else {
             $sql .= " ORDER BY c.fecha_creacion DESC";
         }
@@ -105,13 +114,25 @@ class Curso {
 
     public function obtenerDetalle($cursoId) {
         $sql = "SELECT c.*, u.nombre AS instructor_nombre, cat.nombre AS categoria_nombre,
-                       COALESCE(AVG(CASE WHEN com.eliminado = 0 THEN com.calificacion END), 0) AS promedio_calificacion
+                       COALESCE((
+                           SELECT ROUND(AVG(com.calificacion), 1)
+                           FROM comentarios com
+                           WHERE com.curso_id = c.id AND com.eliminado = 0
+                       ), 0) AS promedio_calificacion,
+                       (
+                           SELECT COUNT(DISTINCT ins.usuario_id)
+                           FROM inscripciones ins
+                           WHERE ins.curso_id = c.id
+                       ) AS total_alumnos,
+                       (
+                           SELECT COUNT(DISTINCT ins.id)
+                           FROM inscripciones ins
+                           WHERE ins.curso_id = c.id
+                       ) AS total_inscritos
                 FROM cursos c
                 INNER JOIN usuarios u ON c.instructor_id = u.id
                 INNER JOIN categorias cat ON c.categoria_id = cat.id
-                LEFT JOIN comentarios com ON c.id = com.curso_id
-                WHERE c.id = :id
-                GROUP BY c.id";
+                WHERE c.id = :id";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([':id' => $cursoId]);
         $curso = $stmt->fetch(PDO::FETCH_ASSOC);

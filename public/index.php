@@ -55,6 +55,10 @@ switch ($url) {
         require_once '../app/views/cursos/reproductor.php';
         break;
 
+    case 'perfil':
+        require_once '../app/views/auth/perfil.php';
+        break;
+
     case 'instructor':
     case 'dashboard-instructor':
         AuthMiddleware::verificarRol('Instructor');
@@ -89,7 +93,7 @@ switch ($url) {
         require_once '../app/controllers/UploadController.php';
         $controller = new UploadController();
         $controller->subirImagen();
-    break;
+        break;
 
     case 'logout':
         session_unset();
