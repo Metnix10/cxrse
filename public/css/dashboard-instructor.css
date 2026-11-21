@@ -22,7 +22,6 @@
     font-size: 14px;
 }
 
-/* Botón Crear Curso con ancho físico definido */
 .btn-create-course {
     background-color: #059669;
     color: white;
@@ -40,7 +39,6 @@
     background-color: #047857;
 }
 
-/* Tarjeta de Filtros */
 .filters-card {
     background-color: #ffffff;
     padding: 20px;
@@ -100,19 +98,75 @@
     background-color: #1d4ed8;
 }
 
-/* Reportes y Tablas */
+body {
+    background-color: #eef2f7;
+}
+
 .report-section {
     background-color: #ffffff;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    padding: 24px;
-    margin-bottom: 30px;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    margin-bottom: 28px;
 }
 
 .report-section h2 {
-    font-size: 18px;
-    color: #1f2937;
-    margin-bottom: 20px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+    color: #0f172a;
+}
+
+#instructorThreadsList {
+    background-color: #f1f5f9 !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+#instructorThreadsList .thread-item {
+    border: 1px solid #cbd5e1 !important;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#instructorThreadsList .thread-item:hover {
+    border-color: #2563eb !important;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12);
+}
+
+#messagesSection .report-section > div > div:last-child,
+#instructorChatHistory {
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+#instructorReplyForm {
+    align-items: center;
+    gap: 10px !important;
+    margin-top: 8px;
+}
+
+#instructorReplyInput {
+    flex: 1 1 auto !important;
+    min-width: 0;
+    width: auto !important;
+    padding: 11px 14px !important;
+    border: 1.5px solid #94a3b8 !important;
+    background-color: #ffffff;
+    font-size: 14px;
+    border-radius: 6px;
+}
+
+#instructorReplyInput:focus {
+    outline: none;
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+#instructorReplyForm .btn-filter {
+    width: auto !important;
+    flex: 0 0 auto;
+    padding: 11px 22px;
+    white-space: nowrap;
 }
 
 .table-wrapper {
@@ -159,7 +213,6 @@
     color: #0f172a;
 }
 
-/* Botón Ver Detalle con ancho definido */
 .btn-view-detail {
     background-color: #2563eb;
     color: white;
@@ -176,7 +229,6 @@
     background-color: #1d4ed8;
 }
 
-/* Desglose por Método de Pago */
 .payment-breakdown-card {
     margin-top: 25px;
     background-color: #f8fafc;

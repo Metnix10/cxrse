@@ -179,4 +179,10 @@ class Curso {
 
         return $cursos;
     }
+
+    public function listarCategorias() {
+        $stmt = $this->conn->prepare("SELECT id, nombre FROM categorias ORDER BY nombre ASC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

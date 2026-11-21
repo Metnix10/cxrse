@@ -222,11 +222,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             chatMessagesList.innerHTML = mensajes.map(m => {
                 const esInstructor = m.remitente_rol === 'Instructor';
+                const avatar = (m.remitente_foto && m.remitente_foto.startsWith('http'))
+                    ? escaparHTML(m.remitente_foto)
+                    : `https://ui-avatars.com/api/?name=${encodeURIComponent(m.remitente_nombre)}&background=2563eb&color=fff&size=64`;
                 return `
-                    <div style="padding:8px 12px; border-radius:8px; background:${esInstructor ? '#dbeafe' : '#ffffff'}; border:1px solid #e5e7eb;">
-                        <strong style="font-size:13px;">${escaparHTML(m.remitente_nombre)} (${escaparHTML(m.remitente_rol)})</strong>
-                        <small style="color:#6b7280; margin-left:6px;">${escaparHTML(m.fecha)}</small>
-                        <p style="margin-top:4px; font-size:14px;">${escaparHTML(m.mensaje)}</p>
+                    <div style="display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border-radius:8px; background:${esInstructor ? '#dbeafe' : '#ffffff'}; border:1px solid #e5e7eb;">
+                        <img src="${avatar}" alt="Avatar" style="width:36px; height:36px; border-radius:50%; object-fit:cover; flex-shrink:0;">
+                        <div>
+                            <strong style="font-size:13px;">${escaparHTML(m.remitente_nombre)} (${escaparHTML(m.remitente_rol)})</strong>
+                            <small style="color:#6b7280; margin-left:6px;">${escaparHTML(m.fecha)}</small>
+                            <p style="margin-top:4px; font-size:14px;">${escaparHTML(m.mensaje)}</p>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -266,6 +272,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         commentsList.innerHTML = comentarios.map(c => {
+            const eliminado = parseInt(c.eliminado, 10) === 1;
+            if (eliminado) {
+                return `
+                    <div class="comment-item" style="background:#f9fafb; border-left:3px solid #9ca3af; padding:10px;">
+                        <p style="color:#6b7280; font-style:italic; margin:0;">${escaparHTML(c.comentario)}</p>
+                    </div>
+                `;
+            }
             const stars = '★'.repeat(c.calificacion) + '☆'.repeat(5 - c.calificacion);
             return `
                 <div class="comment-item">

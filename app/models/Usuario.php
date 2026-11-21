@@ -104,7 +104,7 @@ class Usuario {
                 FROM usuarios u
                 LEFT JOIN cursos c ON u.id = c.instructor_id
                 LEFT JOIN inscripciones ins ON c.id = ins.curso_id
-                WHERE u.rol = 'Instructor'
+                WHERE u.rol = 'Instructor' AND u.estatus = 'Activo'
                 GROUP BY u.id
                 ORDER BY total_ganancias DESC";
         $stmt = $this->conn->prepare($sql);
@@ -119,7 +119,7 @@ class Usuario {
                        COALESCE(ROUND((SUM(CASE WHEN ins.estatus_curso = 'Terminado' OR ins.avance_porcentaje >= 100 THEN 1 ELSE 0 END) / NULLIF(COUNT(ins.id), 0)) * 100, 1), 0) AS porcentaje_terminados
                 FROM usuarios u
                 LEFT JOIN inscripciones ins ON u.id = ins.usuario_id
-                WHERE u.rol = 'Estudiante'
+                WHERE u.rol = 'Estudiante' AND u.estatus = 'Activo'
                 GROUP BY u.id
                 ORDER BY cursos_inscritos DESC";
         $stmt = $this->conn->prepare($sql);

@@ -216,4 +216,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    async function cargarCategoriasSelect() {
+        const selectCat = document.getElementById('categoria') || document.getElementById('categoria_id');
+        if (!selectCat) return;
+
+        try {
+            const res = await fetch('../app/controllers/CursoController.php?recurso=categorias', {
+                credentials: 'include'
+            });
+            const categorias = await res.json();
+
+            if (Array.isArray(categorias) && categorias.length > 0) {
+                selectCat.innerHTML = '<option value="">Selecciona una categoría...</option>' +
+                    categorias.map(cat => `<option value="${cat.id}">${cat.nombre}</option>`).join('');
+            }
+        } catch (error) {
+            console.error('Error al cargar categorías:', error);
+        }
+    }
+
+    cargarCategoriasSelect();
 });

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reproductor de Curso - Cxrse</title>
     <link rel="stylesheet" href="css/global.css?v=2">
-    <link rel="stylesheet" href="css/reproductor.css">
+    <link rel="stylesheet" href="css/reproductor.css?v=3">
 </head>
 <body>
 
@@ -96,6 +96,6 @@
 
     </main>
 
-    <script src="js/reproductor.js?v=3"></script>
+    <script src="js/reproductor.js?v=5"></script>
 </body>
 </html>

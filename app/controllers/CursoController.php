@@ -38,6 +38,10 @@ class CursoController {
                     echo json_encode($this->cursoModel->buscarActivos($_GET));
                 }
 
+            } elseif ($method === 'GET' && $recurso === 'categorias') {
+                http_response_code(200);
+                echo json_encode($this->cursoModel->listarCategorias());
+
             } elseif ($method === 'GET' && $recurso === 'reporte-instructor') {
                 AuthMiddleware::verificarApi('Instructor');
                 $reporte = $this->cursoModel->obtenerReporteInstructor($_SESSION['user_id']);
@@ -96,6 +100,7 @@ class CursoController {
                     }
                 }
 
+                $data['categoria_id'] = (int)$data['categoria_id'];
                 $data['instructor_id'] = $_SESSION['user_id'];
                 $cursoId = $this->cursoModel->crearConNiveles($data, $data['niveles']);
 
@@ -112,8 +117,15 @@ class CursoController {
                     return;
                 }
 
-                $formasValidas = ['PayPal', 'Efectivo', 'Gratis'];
-                if (empty($data['curso_id']) || empty($data['forma_pago']) || !in_array($data['forma_pago'], $formasValidas, true)) {
+                $rawPago = strtolower(trim($data['forma_pago'] ?? ''));
+                $mapaPagos = [
+                    'paypal'   => 'PayPal',
+                    'efectivo' => 'Efectivo',
+                    'gratis'   => 'Gratis'
+                ];
+                $formaPagoNormalizada = $mapaPagos[$rawPago] ?? '';
+
+                if (empty($data['curso_id']) || $formaPagoNormalizada === '') {
                     http_response_code(400);
                     echo json_encode(["error" => "Curso y forma de pago válida (PayPal o Efectivo) requeridos."]);
                     return;
@@ -133,8 +145,8 @@ class CursoController {
                     'usuario_id'    => $usuarioId,
                     'curso_id'      => $cursoId,
                     'nivel_id'      => $nivelId,
-                    'precio_pagado' => $data['forma_pago'] === 'Gratis' ? 0.00 : ($data['precio_pagado'] ?? 0.00),
-                    'forma_pago'    => $data['forma_pago']
+                    'precio_pagado' => $formaPagoNormalizada === 'Gratis' ? 0.00 : ($data['precio_pagado'] ?? 0.00),
+                    'forma_pago'    => $formaPagoNormalizada
                 ]);
 
                 http_response_code(201);

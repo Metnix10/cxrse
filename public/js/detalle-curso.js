@@ -70,6 +70,14 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             reviewsList.innerHTML = comentarios.map(c => {
+                const eliminado = parseInt(c.eliminado, 10) === 1;
+                if (eliminado) {
+                    return `
+                        <div class="nivel-item" style="background:#f9fafb; border-left:3px solid #9ca3af;">
+                            <p style="margin:0; font-size:14px; color:#6b7280; font-style:italic;">${escaparHTML(c.comentario)}</p>
+                        </div>
+                    `;
+                }
                 const calif = Math.max(1, Math.min(5, parseInt(c.calificacion, 10) || 5));
                 const stars = '★'.repeat(calif) + '☆'.repeat(5 - calif);
                 return `

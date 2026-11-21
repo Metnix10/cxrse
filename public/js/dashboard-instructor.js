@@ -252,12 +252,20 @@ document.addEventListener('DOMContentLoaded', function () {
         const msgs = await res.json();
         replyForm.style.display = 'flex';
 
-        chatHistory.innerHTML = msgs.map(m => `
-            <div style="padding:8px 10px; border-radius:6px; background:${m.remitente_rol === 'Instructor' ? '#dbeafe' : '#f3f4f6'};">
-                <strong style="font-size:12px;">${escaparHTML(m.remitente_nombre)}</strong> <small style="color:#6b7280;">${escaparHTML(m.fecha)}</small>
-                <p style="font-size:13px; margin-top:2px;">${escaparHTML(m.mensaje)}</p>
-            </div>
-        `).join('');
+        chatHistory.innerHTML = msgs.map(m => {
+            const avatar = (m.remitente_foto && m.remitente_foto.startsWith('http'))
+                ? escaparHTML(m.remitente_foto)
+                : `https://ui-avatars.com/api/?name=${encodeURIComponent(m.remitente_nombre)}&background=2563eb&color=fff&size=64`;
+            return `
+                <div style="display:flex; gap:10px; align-items:flex-start; padding:8px 10px; border-radius:6px; background:${m.remitente_rol === 'Instructor' ? '#dbeafe' : '#f3f4f6'};">
+                    <img src="${avatar}" alt="Avatar" style="width:32px; height:32px; border-radius:50%; object-fit:cover; flex-shrink:0;">
+                    <div>
+                        <strong style="font-size:12px;">${escaparHTML(m.remitente_nombre)}</strong> <small style="color:#6b7280;">${escaparHTML(m.fecha)}</small>
+                        <p style="font-size:13px; margin-top:2px;">${escaparHTML(m.mensaje)}</p>
+                    </div>
+                </div>
+            `;
+        }).join('');
         chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 

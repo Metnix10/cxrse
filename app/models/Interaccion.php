@@ -7,27 +7,35 @@ class Interaccion {
     }
 
     public function listarComentariosCurso($cursoId) {
-        $sql = "SELECT com.*, u.nombre AS usuario_nombre, u.foto AS usuario_foto
+        $sql = "SELECT com.id, com.comentario, com.calificacion, com.eliminado,
+                       DATE_FORMAT(com.fecha_envio, '%d-%b-%Y %H:%i') AS fecha,
+                       u.nombre AS usuario_nombre, u.foto AS usuario_foto
                 FROM comentarios com
                 INNER JOIN usuarios u ON com.usuario_id = u.id
-                WHERE com.curso_id = :curso_id AND com.eliminado = 0
+                WHERE com.curso_id = :curso_id
                 ORDER BY com.id DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([':curso_id' => $cursoId]);
         $filas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($filas as &$fila) {
-            $fechaRaw = $fila['fecha'] ?? $fila['created_at'] ?? $fila['fecha_comentario'] ?? '';
-            $fila['fecha'] = $fechaRaw ? date('d/m/Y H:i', strtotime($fechaRaw)) : 'Reciente';
+            if ((int)$fila['eliminado'] === 1) {
+                $fila['comentario'] = 'Este comentario fue eliminado por un administrador.';
+            }
         }
         return $filas;
     }
 
     public function crearComentario($usuarioId, $cursoId, $calificacion, $comentario) {
-        $stmtIns = $this->conn->prepare("SELECT id FROM inscripciones WHERE usuario_id = :u AND curso_id = :c LIMIT 1");
+        $stmtIns = $this->conn->prepare(
+            "SELECT id FROM inscripciones
+             WHERE usuario_id = :u AND curso_id = :c
+               AND (estatus_curso = 'Terminado' OR avance_porcentaje >= 100)
+             LIMIT 1"
+        );
         $stmtIns->execute([':u' => $usuarioId, ':c' => $cursoId]);
         if ($stmtIns->rowCount() === 0) {
-            throw new Exception("Solo los alumnos inscritos pueden calificar y comentar este curso.");
+            throw new Exception("Debes finalizar el curso completo (100%) antes de poder calificar y comentar.");
         }
 
         $sql = "INSERT INTO comentarios (curso_id, usuario_id, calificacion, comentario, eliminado)
@@ -41,10 +49,11 @@ class Interaccion {
         ]);
         return $this->conn->lastInsertId();
     }
+
     public function obtenerConversacion($cursoId, $usuarioA, $usuarioB) {
         $sql = "SELECT m.id, m.remitente_id, m.destinatario_id, m.mensaje,
-                       DATE_FORMAT(m.fecha_envio, '%d/%m/%Y %H:%i') AS fecha,
-                       u.nombre AS remitente_nombre, u.rol AS remitente_rol
+                       DATE_FORMAT(m.fecha_envio, '%d-%b-%Y %H:%i') AS fecha,
+                       u.nombre AS remitente_nombre, u.rol AS remitente_rol, u.foto AS remitente_foto
                 FROM mensajes m
                 INNER JOIN usuarios u ON m.remitente_id = u.id
                 WHERE m.curso_id = :curso_id
@@ -62,7 +71,7 @@ class Interaccion {
 
     public function listarBandejaInstructor($instructorId) {
         $sql = "SELECT DISTINCT m.curso_id, c.titulo AS curso_titulo,
-                       alu.id AS alumno_id, alu.nombre AS alumno_nombre,
+                       alu.id AS alumno_id, alu.nombre AS alumno_nombre, alu.foto AS alumno_foto,
                        (SELECT m2.mensaje FROM mensajes m2
                         WHERE m2.curso_id = m.curso_id
                           AND ((m2.remitente_id = alu.id AND m2.destinatario_id = :inst1)

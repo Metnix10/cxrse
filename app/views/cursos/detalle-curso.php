@@ -72,8 +72,8 @@
 
                         <div class="form-group" id="grupoFormaPago">
                             <label for="formaPago">Forma de pago:</label>
-                            <select id="formaPago" required>
-                                <option value="Tarjeta">Efectivo</option>
+                            <select id="formaPago" name="formaPago">
+                                <option value="Efectivo">Efectivo</option>
                                 <option value="PayPal">PayPal</option>
                             </select>
                         </div>
@@ -97,6 +97,6 @@
             rol: <?= json_encode($_SESSION['rol'] ?? '') ?>
         };
     </script>
-    <script src="js/detalle-curso.js?v=3"></script>
+    <script src="js/detalle-curso.js?v=4"></script>
 </body>
 </html>

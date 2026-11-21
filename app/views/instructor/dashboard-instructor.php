@@ -10,7 +10,7 @@ AuthMiddleware::verificarRol('Instructor');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Instructor - Cxrse</title>
     <link rel="stylesheet" href="css/global.css?v=2">
-    <link rel="stylesheet" href="css/dashboard-instructor.css">
+    <link rel="stylesheet" href="css/dashboard-instructor.css?v=3">
 </head>
 <body>
 
@@ -155,6 +155,6 @@ AuthMiddleware::verificarRol('Instructor');
 
     </main>
 
-    <script src="js/dashboard-instructor.js?v=4"></script>
+    <script src="js/dashboard-instructor.js?v=6"></script>
 </body>
 </html>
